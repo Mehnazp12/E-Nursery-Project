@@ -1,0 +1,107 @@
+<div class="container mt-5">
+    <div class="card p-3">
+        <div class="row">
+            <div class="col-6">
+
+                <form #orderForm="ngForm"
+                      (ngSubmit)="createTransactionAndPlaceOrder(orderForm)">
+
+                    <mat-form-field appearance="outline"
+                                    class="w-100">
+                        <mat-label>Full name</mat-label>
+                        <input matInput required #fullName="ngModel"
+                               placeholder="Full name"
+                               [(ngModel)]="orderDetails.fullName"
+                               name="fullName">
+                    </mat-form-field>
+                    <br>
+                    <span *ngIf="fullName.invalid && fullName.touched" style="color: red;">Please Enter  FullName</span>
+                    <br>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Full address</mat-label>
+                        <input matInput required #fullAddress="ngModel"
+                               placeholder="Full address"
+                               [(ngModel)]="orderDetails.fullAddress"
+                               name="fullAddress">
+                    </mat-form-field>
+                    <br>
+                    <span *ngIf="fullAddress.invalid && fullAddress.touched" style="color: red;">Please Enter FullAddress</span>
+                    <br>
+
+                    <mat-form-field appearance="outline"
+                                    class="w-100">
+                        <mat-label>Contact number</mat-label>
+                        <input matInput pattern="^((\\+91-?)|0)?[0-9]{10}$" required minlength="10" maxlength="10"
+                        #contact="ngModel"
+                               placeholder="Contact number"
+                               [(ngModel)]="orderDetails.contactNumber"
+                               name="contactNumber">
+                    </mat-form-field>
+                    <br>
+                    <span *ngIf="contact.invalid && contact.touched" style="color: red;">Please Enter contact Number</span>
+                    <br>
+
+
+                    <mat-form-field appearance="outline"
+                                    class="w-100">
+                        <mat-label>Alternate contact number</mat-label>
+                        <input matInput pattern="^((\\+91-?)|0)?[0-9]{10}$" minlength="10" maxlength="10"
+                        #contact="ngModel"
+                               placeholder="Alternate contact number"
+                               [(ngModel)]="orderDetails.alternateContactNumber"
+                               name="alternateContactNumber">
+                    </mat-form-field>
+                    <br>
+                    <span *ngIf="contact.invalid && contact.touched" style="color: red;">Please Enter Alternate Number</span>
+                    <br>
+
+                    <div align="right">
+                        <button type="submit" mat-stroked-button color="primary" [disabled]="orderForm.invalid">Place Order</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-6">
+                <table class="table">
+                    <thead class="thead">
+                        <tr>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        <tr *ngFor="let product of productDetails">
+                            <td>{{product.productName}}</td>
+                            <td>{{product.productDiscountedPrice}}</td>
+                            <td>
+                                <select 
+                                #quantity
+                                class="form-select"
+                                [ngModel]="getQuantityForProduct(product.productId)"
+                                (change)="onQuantityChanged(quantity.value, product.productId)"
+                                >
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </td>
+                            <td>
+                                {{getCalculatedTotal(product.productId, product.productDiscountedPrice)}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Total</td>
+                            <td> {{getCalculatedGrandTotal()}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
